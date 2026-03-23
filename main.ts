@@ -46,8 +46,11 @@ app.use([UserRoutes, FamilyRoutes, MemberRoutes, OrderRoutes, LeadsRoutes])
 
 app.use(errorHandler)
 
-app.listen(4000, () => {
+const port = Number(process.env.PORT || 8000)
+const host = process.env.HOST || '0.0.0.0'
+
+app.listen(port, host, () => {
     console.log(
-        '💻4000 server working🚀'
+        `💻Server listening on http://${host}:${port} 🚀`
     )
 })
