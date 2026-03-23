@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 export const connectToDatabase = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.DATABASE_URI, {
+    await mongoose.connect(process.env.DATABASE_URI || process.env.Database_URI || process.env.DATABASE_NAME, {
       dbName:"acm"
     });
     console.log(`🚀 Successfully connected to MongoDB`);
