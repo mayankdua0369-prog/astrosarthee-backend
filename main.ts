@@ -42,7 +42,7 @@ app.use(morgan('dev'))
 
 
 app.use(Decoded)
-app.use([UserRoutes, FamilyRoutes, MemberRoutes, OrderRoutes, LeadsRoutes])
+app.use('/api', [UserRoutes, FamilyRoutes, MemberRoutes, OrderRoutes, LeadsRoutes])
 
 
 

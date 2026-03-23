@@ -11,6 +11,8 @@ export const Decoded = async (
     const excludedPaths = [
       "/user/login",
       "/user/seed",
+      "/api/user/login",
+      "/api/user/seed",
     ];
 
     const dynamicExcludedPaths = [
