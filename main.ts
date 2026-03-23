@@ -1,3 +1,5 @@
+import dotenv from 'dotenv'
+dotenv.config({ path: '.env.local' })
 import express from 'express'
 import morgan from 'morgan'
 import { connectToDatabase } from './database/connection'
