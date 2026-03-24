@@ -37,8 +37,9 @@ app.use(
           const parsed = new URL(origin);
           const isLocalHost =
             parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1";
+          const isIpv4Host = /^\d{1,3}(?:\.\d{1,3}){3}$/.test(parsed.hostname);
 
-          if (isLocalHost) {
+          if (isLocalHost || isIpv4Host) {
             return callback(null, true);
           }
         } catch (error) {
