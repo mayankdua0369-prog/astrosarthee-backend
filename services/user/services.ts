@@ -30,20 +30,25 @@ export namespace UserServices {
     next: NextFunction
   ) => {
     try {
-      const { username, password } = req.body;
+      const { username, email, userName, password } = req.body;
+      const loginIdRaw = username || email || userName;
+      const loginId =
+        typeof loginIdRaw === "string" ? loginIdRaw.trim() : loginIdRaw;
+      const passwordValue =
+        typeof password === "string" ? password.trim() : password;
 
-      if (!username || !password) {
+      if (!loginId || !passwordValue) {
         return res.status(400).json({
           meta: {
             status: false,
-            message: "Username and password are required.",
+            message: "Username/email and password are required.",
           },
         });
       }
 
-      const findUser = await UserDatabase.model.findOne({ username });
+      const findUser = await UserDatabase.model.findOne({ username: loginId });
 
-      if (!findUser || findUser.password !== password) {
+      if (!findUser || findUser.password !== passwordValue) {
         return res.status(401).json({
           meta: {
             status: false,

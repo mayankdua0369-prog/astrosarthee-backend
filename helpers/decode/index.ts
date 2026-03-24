@@ -8,19 +8,20 @@ export const Decoded = async (
   next: NextFunction
 ) => {
   try {
-    const excludedPaths = [
+    const normalizedPath = req.path.replace(/\/+$/, "") || "/";
+    const excludedPaths = new Set([
       "/user/login",
       "/user/seed",
       "/api/user/login",
       "/api/user/seed",
-    ];
+    ]);
 
     const dynamicExcludedPaths = [
       "/member/print/:id",
     ];
 
     // Check if the request path matches any exact excluded paths
-    if (excludedPaths.includes(req.path)) {
+    if (excludedPaths.has(normalizedPath)) {
       return next();
     }
 
@@ -30,7 +31,7 @@ export const Decoded = async (
         const regex = new RegExp(
           "^" + pattern.replace(/:[^\s/]+/g, "[^/]+") + "$"
         );
-        return regex.test(req.path);
+        return regex.test(normalizedPath);
       })
     ) {
       return next();
