@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-dotenv.config({ path: '.env.local' })
+dotenv.config({ path: process.env.ENV_FILE || '.env.local' })
 import express from 'express'
 import morgan from 'morgan'
 import { connectToDatabase } from './database/connection'
@@ -17,33 +17,18 @@ import { LeadsRoutes } from './services/leads/routes';
 })();
 
 const app = express()
+const allowedOrigins = new Set(
+  (process.env.CORS_ORIGINS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+);
 
 app.use(
     cors({
       origin: (origin, callback) => {
-        const allowedOrigins = new Set([
-          "http://localhost:3000",
-          "http://localhost:3001",
-          "https://astrosarthee.online",
-          "https://www.astrosarthee.online",
-          "https://3000-firebase-astro-1753453032561.cluster-ubrd2huk7jh6otbgyei4h62ope.cloudworkstations.dev",
-        ]);
-
         if (!origin || allowedOrigins.has(origin)) {
           return callback(null, true);
-        }
-
-        try {
-          const parsed = new URL(origin);
-          const isLocalHost =
-            parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1";
-          const isIpv4Host = /^\d{1,3}(?:\.\d{1,3}){3}$/.test(parsed.hostname);
-
-          if (isLocalHost || isIpv4Host) {
-            return callback(null, true);
-          }
-        } catch (error) {
-          return callback(new Error("Invalid origin"), false);
         }
 
         return callback(new Error("Not allowed by CORS"), false);
